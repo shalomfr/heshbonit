@@ -24,8 +24,9 @@ services:
         value: production
 
   # Frontend (Static Site)
-  - type: static
+  - type: web
     name: heshbonit-client
+    runtime: static
     rootDir: client
     buildCommand: npm install && npm run build
     staticPublishPath: dist
