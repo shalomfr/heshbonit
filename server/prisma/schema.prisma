@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Role values: ADMIN, USER, VIEWER
+// DocumentType values: INVOICE, INVOICE_RECEIPT, RECEIPT, QUOTE
+// DocumentStatus values: DRAFT, SENT, PAID, CANCELLED
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  password     String
+  businessName String
+  businessId   String?
+  address      String?
+  phone        String?
+  logo         String?
+  role         String    @default("USER")
+  vatRate      Float     @default(17)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  clients      Client[]
+  products     Product[]
+  documents    Document[]
+
+  @@map("users")
+}
+
+model Client {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  businessId  String?
+  address     String?
+  city        String?
+  phone       String?
+  email       String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  documents   Document[]
+
+  @@map("clients")
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Float
+  includesVat Boolean   @default(false)
+  unit        String    @default("יחידה")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  documentItems DocumentItem[]
+
+  @@map("products")
+}
+
+model Document {
+  id             String         @id @default(uuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId       String
+  client         Client         @relation(fields: [clientId], references: [id])
+  documentNumber Int
+  type           String
+  status         String         @default("DRAFT")
+  issueDate      DateTime       @default(now())
+  dueDate        DateTime?
+  subtotal       Float          @default(0)
+  vatRate        Float          @default(17)
+  vatAmount      Float          @default(0)
+  total          Float          @default(0)
+  notes          String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  items          DocumentItem[]
+
+  @@unique([userId, type, documentNumber])
+  @@map("documents")
+}
+
+model DocumentItem {
+  id          String    @id @default(uuid())
+  documentId  String
+  document    Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product?  @relation(fields: [productId], references: [id])
+  description String
+  quantity    Float     @default(1)
+  unitPrice   Float
+  total       Float
+  createdAt   DateTime  @default(now())
+
+  @@map("document_items")
+}
