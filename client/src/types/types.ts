@@ -140,3 +140,4 @@ export const documentStatusColors: Record<DocumentStatus, string> = {
   CANCELLED: 'badge-gray',
 };
 
+
