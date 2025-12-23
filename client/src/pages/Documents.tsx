@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Plus,
@@ -26,7 +26,6 @@ export default function Documents() {
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
   const { addToast } = useUIStore();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({

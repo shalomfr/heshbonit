@@ -12,7 +12,7 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import { Download, Calendar, FileText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { reportsApi } from '../api';
 import { PageLoader } from '../components/LoadingSpinner';
 import { documentTypeLabels } from '../types/types';
@@ -185,7 +185,7 @@ export default function Reports() {
                       border: '1px solid #374151',
                       borderRadius: '8px',
                     }}
-                    formatter={(value: number) => [formatCurrency(value), 'הכנסות']}
+                    formatter={(value) => [formatCurrency(value as number), 'הכנסות']}
                   />
                   <Bar dataKey="totalRevenue" fill="#0ea5e9" radius={[0, 4, 4, 0]} />
                 </BarChart>

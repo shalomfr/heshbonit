@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   TrendingUp,
   Users,
-  Package,
   Clock,
   ArrowUpLeft,
   FileText,
@@ -126,7 +124,7 @@ export default function Dashboard() {
                     borderRadius: '8px',
                   }}
                   labelStyle={{ color: '#fff' }}
-                  formatter={(value: number) => [formatCurrency(value), 'הכנסות']}
+                  formatter={(value) => [formatCurrency(value as number), 'הכנסות']}
                 />
                 <Area
                   type="monotone"
